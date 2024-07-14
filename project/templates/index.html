@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+        /* Overall background style */
+        body {
+            background: linear-gradient(135deg, #f8b195, #f67280, #c06c84, #6c5b7b, #355c7d);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        h1, h2 {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            background-color: #444;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        td {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #555;
+            text-align: center;
+            font-size: 3em;
+            cursor: pointer;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        td:hover {
+            background-color: #ffd700;
+            color: #333;
+        }
+        td.X {
+            color: #f67280;
+        }
+        td.O {
+            color: #355c7d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <table class="table table-bordered">
+            <tr>
+                <td id="cell-1"></td>
+                <td id="cell-2"></td>
+                <td id="cell-3"></td>
+            </tr>
+            <tr>
+                <td id="cell-4"></td>
+                <td id="cell-5"></td>
+                <td id="cell-6"></td>
+            </tr>
+            <tr>
+                <td id="cell-7"></td>
+                <td id="cell-8"></td>
+                <td id="cell-9"></td>
+            </tr>
+        </table>
+        <h2 id="message">Current Player: X</h2>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script>
+        const cells = document.querySelectorAll('td');
+        let currentPlayer = "X";
+        let gameBoard = ["", "", "", "", "", "", "", "", ""]; // Empty board
+
+        // Function to handle cell click
+        function cellClick(cell) {
+            const cellIndex = cell.target.id.split('-')[1] - 1; // Extract cell index from id
+            if (gameBoard[cellIndex] !== "") {
+                return; // Cell already filled
+            }
+            gameBoard[cellIndex] = currentPlayer;
+            cell.target.textContent = currentPlayer;
+            cell.target.classList.add(currentPlayer);
+            checkWinner();
+            currentPlayer = currentPlayer === "X" ? "O" : "X"; // Switch players
+            document.getElementById("message").textContent = `Current Player: ${currentPlayer}`;
+        }
+
+        // Function to check for a winner
+        function checkWinner() {
+            const winningConditions = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6],
+            ];
+
+            for (let condition of winningConditions) {
+                if (gameBoard[condition[0]] === currentPlayer &&
+                    gameBoard[condition[1]] === currentPlayer &&
+                    gameBoard[condition[2]] === currentPlayer) {
+                    setTimeout(() => alert(`Player ${currentPlayer} Wins!`), 100);
+                    return;
+                }
+            }
+
+            // Check for a tie
+            if (!gameBoard.includes("")) {
+                setTimeout(() => alert("It's a Tie!"), 100);
+            }
+        }
+
+        // Add click event listener to each cell
+        cells.forEach(cell => cell.addEventListener('click', cellClick));
+    </script>
+</body>
+</html>
